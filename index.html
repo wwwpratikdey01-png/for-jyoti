@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>A Special Surprise</title>
+
+<style>
+body{
+margin:0;
+background: linear-gradient(to right,#141e30,#243b55);
+font-family: Arial, sans-serif;
+color:white;
+text-align:center;
+overflow:hidden;
+}
+
+.container{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+flex-direction:column;
+}
+
+.hidden{ display:none; }
+
+input{
+padding:10px;
+border-radius:10px;
+border:none;
+outline:none;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:10px;
+background:#ff4e8a;
+color:white;
+cursor:pointer;
+margin-top:10px;
+}
+
+#countdown{
+font-size:60px;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+padding:40px;
+border-radius:20px;
+backdrop-filter:blur(10px);
+width:80%;
+max-width:600px;
+}
+
+img{
+width:100%;
+border-radius:15px;
+margin-top:15px;
+}
+
+.heart{
+position:absolute;
+color:pink;
+animation: float 6s linear infinite;
+}
+
+@keyframes float{
+from{ transform:translateY(100vh); opacity:1; }
+to{ transform:translateY(-10vh); opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="passwordScreen">
+<h2>Enter Secret Code 🔐</h2>
+<input type="password" id="pass">
+<button onclick="checkPass()">Unlock</button>
+</div>
+
+<div class="container hidden" id="countdownScreen">
+<h1>Get Ready 💫</h1>
+<div id="countdown">5</div>
+</div>
+
+<div class="container hidden" id="mainContent">
+<div class="card">
+<h1 id="title"></h1>
+<p id="message"></p>
+<img id="slideshow" src="">
+</div>
+</div>
+
+<audio id="music" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+let name = "Jyoti"; // You can change name here if needed
+let password = "jyoti123"; // Change password here
+
+function checkPass(){
+let userPass = document.getElementById("pass").value;
+if(userPass === password){
+document.getElementById("passwordScreen").classList.add("hidden");
+startCountdown();
+}else{
+alert("Wrong password 😉");
+}
+}
+
+function startCountdown(){
+let count = 5;
+document.getElementById("countdownScreen").classList.remove("hidden");
+
+let interval = setInterval(function(){
+count--;
+document.getElementById("countdown").innerText = count;
+if(count === 0){
+clearInterval(interval);
+document.getElementById("countdownScreen").classList.add("hidden");
+showMain();
+}
+},1000);
+}
+
+function showMain(){
+document.getElementById("mainContent").classList.remove("hidden");
+document.getElementById("music").play();
+typeWriter();
+startSlideshow();
+setInterval(createHeart,300);
+}
+
+let text = `Happy Birthday ${name} 🎂
+
+No matter where life takes us,
+I truly hope you find happiness,
+peace, success, and everything beautiful.
+
+Stay amazing. Always 💖`;
+
+let i = 0;
+function typeWriter(){
+if(i < text.length){
+document.getElementById("message").innerHTML += text.charAt(i);
+i++;
+setTimeout(typeWriter,40);
+}
+}
+
+document.getElementById("title").innerText = "A Special Wish For " + name;
+
+let images = [
+"https://picsum.photos/600/400?random=1",
+"https://picsum.photos/600/400?random=2",
+"https://picsum.photos/600/400?random=3"
+];
+
+let imgIndex = 0;
+function startSlideshow(){
+let img = document.getElementById("slideshow");
+img.src = images[0];
+setInterval(function(){
+imgIndex = (imgIndex+1)%images.length;
+img.src = images[imgIndex];
+},3000);
+}
+
+function createHeart(){
+const heart=document.createElement("div");
+heart.classList.add("heart");
+heart.innerHTML="💖";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=Math.random()*20+15+"px";
+document.body.appendChild(heart);
+setTimeout(()=>{heart.remove();},6000);
+}
+
+</script>
+
+</body>
+</html>
